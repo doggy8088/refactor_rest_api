@@ -1,4 +1,4 @@
-This is a REST API Project developed using Java, Maven, Spring boot and H2 In memory Database. 
+This is a REST API Project developed using Java, Maven, Spring boot and H2 In memory Database.  
 The application runs on port 8081
 
 To run this application -
