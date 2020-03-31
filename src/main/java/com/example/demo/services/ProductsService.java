@@ -22,6 +22,7 @@ public class ProductsService {
 
     private static final Logger logger = LogManager.getLogger(ProductsService.class);
 
+    @Autowired
     private ProductsRepository productsRepository;
 
     @Autowired
