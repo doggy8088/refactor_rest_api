@@ -5,13 +5,14 @@ import com.example.demo.models.ProductOptions;
 import com.example.demo.repository.ProductOptionsRepository;
 import com.example.demo.repository.ProductsRepository;
 import com.example.demo.services.ProductOptionsService;
-import com.example.demo.services.ProductsService;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.util.*;
+import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -24,29 +25,34 @@ public class ProductOptionsServiceTest {
     @Autowired
     private ProductsRepository productsReposititory;
 
-    @Test
-    void getAllOptions(){
-        //String id = "f93975b1-7fc4-4652-8808-236b8f071602";
-        productOptionsRepository.deleteAll();
-        productsReposititory.deleteAll();
+    @Autowired
+    private ProductOptionsService productOptionsService;
 
+    @BeforeEach
+    public void createRepositories() {
         Product product = new Product( "Samsung Galaxy 10", "Newest mobile product from Samsung.", 1024.99, 16.99);
         productsReposititory.save(product);
-        ProductOptions productOptions = new ProductOptions(product, "White","White Samsung Galaxy S7");
-        productOptionsRepository.save(productOptions);
+        ProductOptions productOptions1 = new ProductOptions(product, "White","White Samsung Galaxy S7");
+        productOptionsRepository.save(productOptions1);
+    }
 
-        ProductOptionsService productOptionsService = new ProductOptionsService(productsReposititory, productOptionsRepository);
+    @AfterEach
+    public void deleteRepositories() {
+        productOptionsRepository.deleteAll();
+        productsReposititory.deleteAll();
+    }
+
+    @Test
+    void getAllOptions(){
         UUID productId = productsReposititory.findAll().get(0).getId();
         List<ProductOptions> productOptionsList = productOptionsRepository.findByProductId(productId);
-        assertEquals(productOptions.getName(), productOptionsList.get(0).getName());
-        assertEquals(productOptions.getDescription(), productOptionsList.get(0).getDescription());
+        assertEquals(1, productOptionsList.size());
     }
 
     @Test
     void saveProductOptions(){
-        Product product = new Product("Samsung Galaxy 10", "Newest mobile product from Samsung.", 1024.99, 16.99);
-        productsReposititory.save(product);
-        ProductOptions productOptions = new ProductOptions(product, "White","White Samsung Galaxy S7");
+        Product product = productsReposititory.findAll().get(0);
+        ProductOptions productOptions = new ProductOptions(product, "Pink","Pink Samsung Galaxy S7");
         long count = productOptionsRepository.count();
         productOptionsRepository.save(productOptions);
         assertEquals((count+1), productOptionsRepository.count());
@@ -54,14 +60,11 @@ public class ProductOptionsServiceTest {
 
     @Test
     void findProductOption(){
-        Product product = new Product("Samsung Galaxy 10", "Newest mobile product from Samsung.", 1024.99, 16.99);
-        productsReposititory.save(product);
-        ProductOptions productOptions = new ProductOptions(product, "White","White Samsung Galaxy S7");
-        productOptionsRepository.save(productOptions);
+        List<Product> productList = productsReposititory.findAll();
+        String productId = productList.get(0).getId().toString();
         List<ProductOptions>  productOptionsList = productOptionsRepository.findAll();
         String optionId = productOptionsList.get(0).getId().toString();
-        ProductOptionsService productsService = new ProductOptionsService(productsReposititory, productOptionsRepository);
-        ProductOptions productOption = productsService.getProductOption(product.getId().toString(), optionId);
+        ProductOptions productOption = productOptionsService.getProductOption(productId, optionId);
         assertEquals(optionId, productOption.getId().toString());
         assertEquals("White", productOption.getName());
         assertEquals("White Samsung Galaxy S7", productOption.getDescription());
@@ -69,15 +72,12 @@ public class ProductOptionsServiceTest {
 
     @Test
     void updateProductOption() {
-        Product product = new Product("Samsung Galaxy 10", "Newest mobile product from Samsung.", 1024.99, 16.99);
-        productsReposititory.save(product);
-        ProductOptions productOptions = new ProductOptions(product, "White","White Samsung Galaxy S7");
-        productOptionsRepository.save(productOptions);
+        List<Product> productList = productsReposititory.findAll();
+        String productId = productList.get(0).getId().toString();
         List<ProductOptions>  productOptionsList = productOptionsRepository.findAll();
-        ProductOptionsService productOptionsService = new ProductOptionsService(productsReposititory, productOptionsRepository);
         if(productOptionsList.size()>0){
             String optionId = productOptionsList.get(0).getId().toString();
-            ProductOptions productOption = productOptionsService.getProductOption(product.getId().toString(),optionId);
+            ProductOptions productOption = productOptionsService.getProductOption(productId,optionId);
             if(productOption != null){
                 productOptionsRepository.save(productOption);
                 assertEquals(productOptionsList.size(),productOptionsRepository.count());
@@ -87,13 +87,6 @@ public class ProductOptionsServiceTest {
 
     @Test
     void deleteOption() {
-        productOptionsRepository.deleteAll();
-        productsReposititory.deleteAll();
-        Product product = new Product("Samsung Galaxy 10", "Newest mobile product from Samsung.", 1024.99, 16.99);
-        productsReposititory.save(product);
-        ProductOptions productOptions = new ProductOptions(product, "White","White Samsung Galaxy S7");
-        productOptionsRepository.save(productOptions);
-        ProductOptionsService productOptionsService = new ProductOptionsService(productsReposititory, productOptionsRepository);
         String productId = productsReposititory.findAll().get(0).getId().toString();
         String optionId = productOptionsRepository.findAll().get(0).getId().toString();
         long count = productOptionsRepository.count();

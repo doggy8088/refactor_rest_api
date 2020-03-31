@@ -3,6 +3,8 @@ package com.example.demo;
 import com.example.demo.models.Product;
 import com.example.demo.repository.ProductsRepository;
 import com.example.demo.services.ProductsService;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,18 +25,23 @@ public class ProductsServiceTest {
     @Autowired
     private ProductsService productsService;
 
+    @BeforeEach
+    public void createProductRepository(){
+        Product product1 = new Product( "Samsung Galaxy S7", "Newest mobile product from Samsung.", 1024.99, 16.99);
+        Product product2 = new Product( "Apple iPhone 6S", "Newest mobile product from Apple.", 1224.99, 17.99);
+        productsRepository.save(product1);
+        productsRepository.save(product2);
+    }
+
+    @AfterEach
+    public void deleteProductRepository(){
+        productsRepository.deleteAll();
+    }
+
     @Test
     void getAllProducts(){
-        Product product = new Product( "Samsung Galaxy S7", "Newest mobile product from Samsung.", 1024.99, 16.99);
-        productsRepository.save(product);
-        assertEquals(1.0, productsRepository.count());
-
         List<Product> productsList = productsService.findAll();
-        Product lastProduct = productsList.get(0);
-        assertEquals(lastProduct.getName(), product.getName());
-        assertEquals(lastProduct.getDescription(), product.getDescription());
-        assertEquals(lastProduct.getPrice(), product.getPrice());
-        assertEquals(lastProduct.getDeliveryPrice(), product.getDeliveryPrice());
+        assertEquals(2, productsList.size());
     }
 
     @Test
@@ -51,6 +58,10 @@ public class ProductsServiceTest {
         List<Product> productList = productsService.find(name);
         assertEquals(1.0, productList.size());
         assertEquals(productList.get(0).getName(), name);
+        assertEquals(productList.get(0).getDescription(), "Newest mobile product from Samsung.");
+        assertEquals(productList.get(0).getPrice(), 1024.99);
+        assertEquals(productList.get(0).getDeliveryPrice(), 16.99);
+
     }
 
     @Test
@@ -78,13 +89,9 @@ public class ProductsServiceTest {
 
     @Test
     void deleteProduct() {
-        productsRepository.deleteAll();
-        Product product = new Product("Samsung Galaxy S7", "Newest mobile product from Samsung.", 1024.99, 16.99);
-        productsRepository.save(product);
         UUID uuid = productsRepository.findAll().get(0).getId();
         long currentCount = productsRepository.count();
         productsRepository.deleteById(uuid);
         assertEquals((currentCount-1), productsRepository.count());
-
     }
 }

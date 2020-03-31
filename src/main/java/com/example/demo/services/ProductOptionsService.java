@@ -30,17 +30,12 @@ public class ProductOptionsService {
     @Autowired
     private ProductsRepository productsRepository;
 
-    public ProductOptionsService(ProductsRepository productsRepository, ProductOptionsRepository productOptionsRepository) {
-        this.productsRepository = productsRepository;
-        this.productOptionsRepository = productOptionsRepository;
-    }
-
     @Transactional
     public List<ProductOptions> getAllOptions(String productId){
         logger.info("ProductOptionsService : getAllOptions: productId = "+productId);
         Optional<Product> product = productsRepository.findById(UUID.fromString(productId));
         if(product.isPresent()){
-            return product.get().getProductOptions();
+            return productOptionsRepository.findByProductId(UUID.fromString(productId));
         } else {
             throw new ProductNotFoundException("Product Id "+productId+" not found");
         }
