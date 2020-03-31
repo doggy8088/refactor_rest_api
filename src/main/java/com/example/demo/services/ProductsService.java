@@ -28,10 +28,6 @@ public class ProductsService {
     @Autowired
     private ProductOptionsRepository productOptionsRepository;
 
-    public ProductsService(ProductsRepository productsRepository) {
-        this.productsRepository = productsRepository;
-    }
-
     public List<Product> findAll(){
         return productsRepository.findAll();
     }

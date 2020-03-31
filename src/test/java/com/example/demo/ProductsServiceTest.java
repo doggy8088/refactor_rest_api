@@ -4,18 +4,15 @@ import com.example.demo.models.Product;
 import com.example.demo.repository.ProductsRepository;
 import com.example.demo.services.ProductsService;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 public class ProductsServiceTest {
@@ -23,11 +20,13 @@ public class ProductsServiceTest {
     @Autowired
     private ProductsRepository productsRepository;
 
+    @Autowired
+    private ProductsService productsService;
+
     @Test
     void getAllProducts(){
         Product product = new Product( "Samsung Galaxy S7", "Newest mobile product from Samsung.", 1024.99, 16.99);
         productsRepository.save(product);
-        ProductsService productsService = new ProductsService(productsRepository);
         assertEquals(1.0, productsRepository.count());
 
         List<Product> productsList = productsService.findAll();
@@ -41,7 +40,6 @@ public class ProductsServiceTest {
     @Test
     void saveProduct() {
         Product product = new Product( "Samsung Galaxy S7", "Newest mobile product from Samsung.", 1024.99, 16.99);
-        ProductsService productsService = new ProductsService(productsRepository);
         long count = productsRepository.count();
         productsService.save(product);
         assertEquals((count+1), productsRepository.count());
@@ -50,7 +48,6 @@ public class ProductsServiceTest {
     @Test
     void findProductByName() {
         String name = "Samsung Galaxy S7";
-        ProductsService productsService = new ProductsService(productsRepository);
         List<Product> productList = productsService.find(name);
         assertEquals(1.0, productList.size());
         assertEquals(productList.get(0).getName(), name);
@@ -58,18 +55,16 @@ public class ProductsServiceTest {
 
     @Test
     void findProductById() {
-        ProductsService productsService = new ProductsService(productsRepository);
         List<Product> productList = productsService.findAll();
         if(productList.size()>0){
             UUID uuid = productList.get(0).getId();
             Optional<Product> product = productsService.findById(uuid);
-            assertEquals(true, product.isPresent());
+            assertTrue(product.isPresent());
         }
     }
 
     @Test
     void updateProductById() {
-        ProductsService productsService = new ProductsService(productsRepository);
         List<Product> productList = productsService.findAll();
         if(productList.size()>0){
             UUID uuid = productList.get(0).getId();
@@ -83,7 +78,6 @@ public class ProductsServiceTest {
 
     @Test
     void deleteProduct() {
-        ProductsService productsService = new ProductsService(productsRepository);
         productsRepository.deleteAll();
         Product product = new Product("Samsung Galaxy S7", "Newest mobile product from Samsung.", 1024.99, 16.99);
         productsRepository.save(product);

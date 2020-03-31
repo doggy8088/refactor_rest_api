@@ -8,7 +8,6 @@ import com.example.demo.services.ProductOptionsService;
 import com.example.demo.services.ProductsService;
 import com.example.demo.util.ProductOptionsResponse;
 import com.example.demo.util.ProductResponse;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,28 +20,28 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ *  ExtendWith is introduced in Spring 5 to integrate with JUNIT Jupiter test
+ */
 @ExtendWith(SpringExtension.class)
 @WebMvcTest({ProductsController.class, ProductOptionsController.class})
 public class ProductsControllerTest {
 
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     @MockBean
     private ProductsService productsService;
@@ -58,7 +57,7 @@ public class ProductsControllerTest {
 
     @Test
     void getAllProducts() throws Exception {
-        List<Product> productsList = new ArrayList<Product>();
+        List<Product> productsList = new ArrayList<>();
         productsList.add(new Product(UUID.randomUUID(), "Samsung Galaxy 10", "Newest mobile product from Samsung.", 1024.99, 16.99));
         productsList.add(new Product(UUID.randomUUID(), "Apple iPhone 6S", "Newest mobile product from Apple.", 1299.99, 15.99));
         ProductResponse productResponse = new ProductResponse();
@@ -69,8 +68,10 @@ public class ProductsControllerTest {
         mockMvc.perform(get("/products")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
+                .andDo(print())
                 .andExpect(jsonPath("$.items", hasSize(2)))
-                .andExpect(jsonPath("$.items[0].name").value("Samsung Galaxy 10"));
+                .andExpect(jsonPath("$.items[0].name").value("Samsung Galaxy 10"))
+                .andExpect(jsonPath("$.items[1].name").value("Apple iPhone 6S"));
 
     }
 
@@ -95,7 +96,7 @@ public class ProductsControllerTest {
     @Test
     void findProductByName() throws Exception {
         String name = "Samsung Galaxy S7";
-        List<Product> productsList = new ArrayList<Product>();
+        List<Product> productsList = new ArrayList<>();
         productsList.add(new Product( "Samsung Galaxy S7", "Newest mobile product from Samsung.", 1024.99, 16.99));
         productsList.add(new Product( "Samsung Galaxy S7", "Newest mobile product from Samsung.", 1024.99, 16.99));
         ProductResponse productResponse = new ProductResponse();
