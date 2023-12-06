@@ -1,14 +1,20 @@
 package com.example.demo.exceptions;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 /**
  * This class is specific to HTTP Status 404 - Not found. Any custom messages can be added here.
  */
-@ResponseStatus(HttpStatus.NOT_FOUND)
+@ResponseStatus(NOT_FOUND)
 public class ProductNotFoundException extends RuntimeException {
-    public ProductNotFoundException(String message) {
-        super(message);
+
+    public ProductNotFoundException(String id) {
+        super(String.format("Product id %s not found", id));
+    }
+
+    public static ProductNotFoundException notFound(String id){
+        return new ProductNotFoundException(id);
     }
 }

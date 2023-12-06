@@ -12,28 +12,18 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.util.Date;
 
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+
 /**
  * Custom Exception Handler : Handles the specified exceptions and modifies the default response.
  */
 @ControllerAdvice
 @RestController
-public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
+public class CustomizedResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) throws Exception {
-        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    @ExceptionHandler({ProductNotFoundException.class, ProductOptionsNotFoundException.class})
-    public final ResponseEntity<Object> handleProductNotFoundExceptions(RuntimeException ex, WebRequest request) throws Exception {
-        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
-    }
-
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), "Validation Failed",  ex.getBindingResult().getFieldError().getField()+" "+ex.getBindingResult().getFieldError().getDefaultMessage());
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    public final ResponseEntity<Object> handleAllExceptions(Exception ex) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage());
+        return new ResponseEntity<>(exceptionResponse, INTERNAL_SERVER_ERROR);
     }
 }

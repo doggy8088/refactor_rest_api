@@ -1,0 +1,22 @@
+GET http://localhost:8081/products
+
+###
+
+GET http://localhost:8081/products/abpxx6d04wxr
+
+###
+
+POST http://localhost:8081/products
+Content-Type: application/json
+
+{
+    "id": "abpxx6d04wxr",
+    "name": "Product Name",
+    "description": "Product Description",
+    "price": 10.0,
+    "deliveryPrice": 5.0
+}
+
+###
+
+DELETE http://localhost:8081/products/abpxx6d04wxr

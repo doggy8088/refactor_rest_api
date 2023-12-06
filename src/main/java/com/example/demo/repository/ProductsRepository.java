@@ -7,13 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * This Repository interface talks to the Products Table in the Database.
- */
-@Repository("productsRepository")
-public interface ProductsRepository extends JpaRepository<Product, UUID> {
+public interface ProductsRepository extends JpaRepository<Product, String> {
 
-    /* To find the product by Name */
-    public List<Product> findByName(String name);
-
+    List<Product> findByName(String name);
 }

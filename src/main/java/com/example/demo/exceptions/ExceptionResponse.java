@@ -1,27 +1,28 @@
 package com.example.demo.exceptions;
 
+import java.text.DateFormat;
 import java.util.Date;
 
 /**
  * All handled exceptions contains timestamp, message and its details.
  */
 public class ExceptionResponse {
-    private Date timestamp;
+    private String timestamp;
     private String message;
-    private String details;
 
-    public ExceptionResponse(Date timestamp, String message, String details) {
-        this.timestamp = timestamp;
+    public ExceptionResponse(Date timestamp, String message) {
+        DateFormat dateFormat = DateFormat.getDateTimeInstance();
+        this.timestamp = dateFormat.format(timestamp);
         this.message = message;
-        this.details = details;
     }
 
-    public Date getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
     public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
+        DateFormat dateFormat = DateFormat.getDateTimeInstance();
+        this.timestamp = dateFormat.format(timestamp);
     }
 
     public String getMessage() {
@@ -30,13 +31,5 @@ public class ExceptionResponse {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public String getDetails() {
-        return details;
-    }
-
-    public void setDetails(String details) {
-        this.details = details;
     }
 }

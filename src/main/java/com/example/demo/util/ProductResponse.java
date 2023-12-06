@@ -11,6 +11,10 @@ public class ProductResponse {
 
     private List<Product> items;
 
+    public ProductResponse(List<Product> items) {
+        this.items = items;
+    }
+
     public List<Product> getItems() {
         return items;
     }

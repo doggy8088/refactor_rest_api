@@ -22,12 +22,13 @@ public class SwaggerConfig {
     private static final ApiInfo DEFAULT_API_INFO = new ApiInfo("Product Api Documentation",
             "Description about Products and its Options",
             "1.0", "urn:tos", DEFAULT_CONTACT,
-            "Apache 2.0", "http://www.apache.org/licenses/LICENSE-2.0");;
+            "Apache 2.0", "http://www.apache.org/licenses/LICENSE-2.0");
+    ;
 
     private Set<String> DEFAULT_CONSUMES_PRODUCES = new HashSet<>(Arrays.asList("application/json", "application/xml"));
 
     @Bean
-    public Docket api(){
+    public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(DEFAULT_API_INFO)
                 .consumes(DEFAULT_CONSUMES_PRODUCES)
