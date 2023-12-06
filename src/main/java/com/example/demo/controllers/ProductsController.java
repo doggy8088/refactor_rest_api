@@ -1,11 +1,13 @@
 package com.example.demo.controllers;
 
-import com.example.demo.models.Product;
-import com.example.demo.services.ProductsService;
-import com.example.demo.util.ProductResponse;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import static org.springframework.http.ResponseEntity.created;
+import static org.springframework.http.ResponseEntity.ok;
+
+import java.net.URI;
+import java.util.List;
+
+import javax.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,15 +19,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
+import com.example.demo.models.Product;
+import com.example.demo.services.ProductsService;
+import com.example.demo.util.ProductResponse;
 
-import java.net.URI;
-import java.util.List;
-
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.ResponseEntity.ok;
-import static org.springframework.http.ResponseEntity.status;
-import static org.springframework.http.ResponseEntity.created;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 @Api(value = "Products")
 @RestController

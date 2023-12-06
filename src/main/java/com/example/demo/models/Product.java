@@ -1,7 +1,6 @@
 package com.example.demo.models;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import static java.util.UUID.randomUUID;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -9,9 +8,9 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
-import java.util.UUID;
 
-import static java.util.UUID.randomUUID;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 @Entity
 @Table(name = "PRODUCT")
@@ -36,7 +35,6 @@ public class Product {
     @PositiveOrZero(message = "cannot be less than zero")
     @ApiModelProperty(notes = "Delivery Price cannot be less than zero")
     private Double deliveryPrice;
-
 
     public Product(String name, String description, Double price, Double deliveryPrice) {
         this.id = randomUUID().toString();

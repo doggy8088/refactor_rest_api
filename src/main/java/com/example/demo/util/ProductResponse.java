@@ -1,11 +1,12 @@
 package com.example.demo.util;
 
-import com.example.demo.models.Product;
-
 import java.util.List;
 
+import com.example.demo.models.Product;
+
 /**
- * This class is invoked from the controller. This wraps the get_all_Products response.
+ * This class is invoked from the controller. This wraps the get_all_Products
+ * response.
  */
 public class ProductResponse {
 

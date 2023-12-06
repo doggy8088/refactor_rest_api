@@ -1,15 +1,16 @@
 package com.example.demo.services;
 
-import com.example.demo.models.Product;
-import com.example.demo.repository.ProductsRepository;
+import static com.example.demo.exceptions.ProductNotFoundException.notFound;
+
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
-import static com.example.demo.exceptions.ProductNotFoundException.notFound;
+import com.example.demo.models.Product;
+import com.example.demo.repository.ProductsRepository;
 
 /**
  * This service class talks to the repositories for the data
